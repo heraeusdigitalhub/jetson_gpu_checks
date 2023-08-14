@@ -1,0 +1,3 @@
+black
+ruff;python_version>="3.7"  # ruff only supports Python>3.7 so we're linting only there
+pre-commit

@@ -1,0 +1,32 @@
+jobs:
+- job: Linting & Pytest
+  pool:
+    vmImage: 'ubuntu-latest'
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.7'
+      Python310:
+        python.version: '3.10'
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+
+  - script: python -m pip install --upgrade pip setuptools wheel
+    displayName: 'Install tools'
+
+  - script: |
+      pip install -e .[all]
+    displayName: 'Install test dependencies'
+
+  - script: |
+      pip install pre-commit
+      pre-commit run --all-files
+    displayName: 'Run pre-commit'
+
+  - script: |
+      pip install -r requirements-test.txt pytest-azurepipelines
+      make test-pipeline
+    displayName: 'Run pytest'
+    condition: or(succeeded(), failed())
