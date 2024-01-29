@@ -116,8 +116,10 @@ def main():
         icinga_return("UNKNOWN", "Wrong usage")
 
     result = check_condition(warni=int(args.warning), critical=int(args.critical))
+    output = f"{result['message']} | 'GPU Temperature'={result['perfdata']}°C;{args.warning};{args.critical};0;100"
 
-    return (result["code"], result["message"], result["perfdata"])
+    print(output)
+    return output
 
 
 if __name__ == "__main__":
